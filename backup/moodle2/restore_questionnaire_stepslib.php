@@ -14,21 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package mod_questionnaire
- * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
- * @author     Mike Churchward
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Define all the restore steps that will be used by the restore_questionnaire_activity_task
- */
-
-/**
  * Structure step to restore one questionnaire activity
+ * @package mod_questionnaire
+ * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
+ * @author     Mike Churchward
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_questionnaire_activity_structure_step extends restore_activity_structure_step {
 
@@ -47,6 +41,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
      */
     protected $olddependencies = [];
 
+    /**
+     * @return mixed
+     * @throws base_step_exception
+     */
     protected function define_structure() {
 
         $paths = array();
@@ -110,6 +108,11 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * @param $data
+     * @throws base_step_exception
+     * @throws dml_exception
+     */
     protected function process_questionnaire($data) {
         global $DB;
 
@@ -126,6 +129,12 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * @param $data
+     * @throws base_step_exception
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_questionnaire_survey($data) {
         global $DB;
 
@@ -146,6 +155,11 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->set_field('questionnaire', 'sid', $newitemid, array('id' => $this->get_new_parentid('questionnaire')));
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_questionnaire_question($data) {
         global $DB;
 
@@ -193,6 +207,11 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $this->set_mapping('questionnaire_fb_sections', $oldid, $newitemid, true);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_questionnaire_feedback($data) {
         global $DB;
 
@@ -205,6 +224,11 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $this->set_mapping('questionnaire_feedback', $oldid, $newitemid, true);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_questionnaire_quest_choice($data) {
         global $CFG, $DB;
 
@@ -234,6 +258,9 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $this->set_mapping('questionnaire_quest_choice', $oldid, $newitemid);
     }
 
+    /**
+     * @param $data
+     */
     protected function process_questionnaire_dependency($data) {
         $data = (object)$data;
 
@@ -245,11 +272,20 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     protected function process_questionnaire_attempt($data) {
         // New structure will be completed in process_questionnaire_response. Nothing to do here any more.
         return true;
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_questionnaire_response($data) {
         global $DB;
 
@@ -269,6 +305,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $this->set_mapping('questionnaire_response', $oldid, $newitemid);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_bool($data) {
         global $DB;
 
@@ -280,6 +320,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_response_bool', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_date($data) {
         global $DB;
 
@@ -291,6 +335,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_response_date', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_multiple($data) {
         global $DB;
 
@@ -303,6 +351,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_resp_multiple', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_other($data) {
         global $DB;
 
@@ -315,6 +367,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_response_other', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_rank($data) {
         global $DB;
 
@@ -333,6 +389,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_response_rank', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_single($data) {
         global $DB;
 
@@ -345,6 +405,10 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_resp_single', $data);
     }
 
+    /**
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_questionnaire_response_text($data) {
         global $DB;
 
@@ -356,6 +420,9 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
         $DB->insert_record('questionnaire_response_text', $data);
     }
 
+    /**
+     * @throws dml_exception
+     */
     protected function after_execute() {
         global $DB;
 

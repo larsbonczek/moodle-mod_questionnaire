@@ -14,22 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * print the form to add or edit a questionnaire-instance
- *
- * @author Mike Churchward
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package questionnaire
- */
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/questionnaire/questionnaire.class.php');
 require_once($CFG->dirroot.'/mod/questionnaire/locallib.php');
 
+/**
+ * print the form to add or edit a questionnaire-instance
+ *
+ * @author Mike Churchward
+ * @copyright  2016 onward Mike Churchward (mike.churchward@poetgroup.org)
+ * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package mod_questionnaire
+ */
+
 class mod_questionnaire_mod_form extends moodleform_mod {
 
+    /**
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     protected function definition() {
         global $COURSE;
         global $questionnairetypes, $questionnairerespondents, $questionnaireresponseviewers, $autonumbering;
@@ -145,6 +150,10 @@ class mod_questionnaire_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    /**
+     * @param array $defaultvalues
+     * @throws dml_exception
+     */
     public function data_preprocessing(&$defaultvalues) {
         global $DB;
         if (empty($defaultvalues['opendate'])) {
@@ -188,12 +197,20 @@ class mod_questionnaire_mod_form extends moodleform_mod {
         return $errors;
     }
 
+    /**
+     * @return string[]
+     * @throws coding_exception
+     */
     public function add_completion_rules() {
         $mform =& $this->_form;
         $mform->addElement('checkbox', 'completionsubmit', '', get_string('completionsubmit', 'questionnaire'));
         return array('completionsubmit');
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public function completion_rule_enabled($data) {
         return !empty($data['completionsubmit']);
     }

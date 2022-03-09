@@ -17,8 +17,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Define all the backup steps that will be used by the backup_questionnaire_activity_task
- * Define the complete choice structure for backup, with file and id annotations
+ * Define all the backup steps that will be used by the backup_questionnaire_activity_task.
+ * Define the complete choice structure for backup, with file and id annotations.
  * @package mod_questionnaire
  * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
  * @author     Mike Churchward
@@ -27,10 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 class backup_questionnaire_activity_structure_step extends backup_activity_structure_step {
 
     /**
+     * Defines the backup structure.
      * @return backup_nested_element
-     * @throws base_element_struct_exception
-     * @throws base_step_exception
-     * @throws dml_exception
      */
     protected function define_structure() {
         global $DB;

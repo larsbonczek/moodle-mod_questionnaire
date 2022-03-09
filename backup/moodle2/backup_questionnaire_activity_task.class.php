@@ -22,8 +22,7 @@ require_once($CFG->dirroot . '/mod/questionnaire/backup/moodle2/backup_questionn
 require_once($CFG->dirroot . '/mod/questionnaire/backup/moodle2/backup_questionnaire_settingslib.php');
 
 /**
- * Questionnaire backup task that provides all the settings and steps to perform one
- * complete backup of the activity
+ * Questionnaire backup task that provides all the settings and steps to perform one complete backup of the activity.
  * @package mod_questionnaire
  * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
  * @author     Mike Churchward
@@ -49,7 +48,7 @@ class backup_questionnaire_activity_task extends backup_activity_task {
     /**
      * Code the transformations to perform in the activity in
      * order to get transportable (encoded) links
-     * @param $content
+     * @param string $content
      * @return array|string|string[]|null
      */
     public static function encode_content_links($content) {

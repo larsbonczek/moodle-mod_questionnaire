@@ -2785,6 +2785,7 @@ class questionnaire {
      * error string.
      * @param string $rid
      * @param bool $uid
+     * @param bool $pdf
      * @param string $currentgroupid
      * @param string $sort
      * @return string|void
@@ -2925,9 +2926,9 @@ class questionnaire {
 
     /**
      * Get unique list of question types used in the current survey.
+     * author: Guy Thomas
      * @param bool $uniquebytable
      * @return array
-     * @author: Guy Thomas
      */
     protected function get_survey_questiontypes($uniquebytable = false) {
 
@@ -2962,9 +2963,8 @@ class questionnaire {
 
     /**
      * Return all the fields to be used for users in questionnaire sql.
-     *
+     * author: Guy Thomas
      * @return array|string
-     * @author: Guy Thomas
      */
     protected function user_fields() {
         if (class_exists('\core_user\fields')) {
@@ -2978,11 +2978,12 @@ class questionnaire {
 
     /**
      * Get all survey responses in one go.
-     *
+     * author: Guy Thomas
      * @param string $rid
      * @param string $userid
+     * @param bool $groupid
+     * @param int $showincompletes
      * @return array
-     * @author: Guy Thomas
      */
     protected function get_survey_all_responses($rid = '', $userid = '', $groupid = false, $showincompletes = 0) {
         global $DB;
@@ -3033,18 +3034,14 @@ class questionnaire {
 
     /**
      * Process individual row for csv output
-     * @param array $outputrow output row
+     * @param array $row
      * @param stdClass $resprow resultset row
      * @param int $currentgroupid
      * @param array $questionsbyposition
      * @param int $nbinfocols
      * @param int $numrespcols
+     * @param int $showincompletes
      * @return array
-     * @throws Exception
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws dml_missing_record_exception
-     * @throws dml_multiple_records_exception
      */
     protected function process_csv_row(array &$row,
                                        stdClass $resprow,
@@ -3994,6 +3991,7 @@ class questionnaire {
     }
 
     // Mobile support area.
+
     /**
      * Save the data from the mobile app.
      * @param int $userid
@@ -4001,6 +3999,7 @@ class questionnaire {
      * @param bool $completed
      * @param int $rid
      * @param bool $submit
+     * @param string $action
      * @param array $responses
      * @return array
      */

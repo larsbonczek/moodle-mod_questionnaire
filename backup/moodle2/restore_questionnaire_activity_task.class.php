@@ -20,8 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/questionnaire/backup/moodle2/restore_questionnaire_stepslib.php');
 
 /**
- * Questionnaire restore task that provides all the settings and steps to perform one
- * complete restore of the activity.
+ * Questionnaire restore task that provides all the settings and steps to perform one complete restore of the activity.
  * @package mod_questionnaire
  * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
  * @author     Mike Churchward

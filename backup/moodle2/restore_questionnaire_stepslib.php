@@ -17,8 +17,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Define all the restore steps that will be used by the restore_questionnaire_activity_task
- * Structure step to restore one questionnaire activity
+ * Define all the restore steps that will be used by the restore_questionnaire_activity_task.
+ * Structure step to restore one questionnaire activity.
  * @package mod_questionnaire
  * @copyright  2016 Mike Churchward (mike.churchward@poetgroup.org)
  * @author     Mike Churchward
@@ -42,8 +42,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     protected $olddependencies = [];
 
     /**
+     * Implementation of define_structure.
      * @return mixed
-     * @throws base_step_exception
      */
     protected function define_structure() {
 
@@ -109,9 +109,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws base_step_exception
-     * @throws dml_exception
+     * Implementation of process_questionnaire.
+     * @param array $data
      */
     protected function process_questionnaire($data) {
         global $DB;
@@ -130,10 +129,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws base_step_exception
-     * @throws dml_exception
-     * @throws restore_step_exception
+     * Process the survey table.
+     * @param array $data
      */
     protected function process_questionnaire_survey($data) {
         global $DB;
@@ -156,9 +153,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws dml_exception
-     * @throws restore_step_exception
+     * Process the questions.
+     * @param array $data
      */
     protected function process_questionnaire_question($data) {
         global $DB;
@@ -180,9 +176,9 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
+     * Process the feedback sections.
      * $qid is unused, but is needed in order to get the $key elements of the array. Suppress PHPMD warning.
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $data
      */
     protected function process_questionnaire_fb_sections($data) {
         global $DB;
@@ -208,9 +204,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws dml_exception
-     * @throws restore_step_exception
+     * Process feedback.
+     * @param array $data
      */
     protected function process_questionnaire_feedback($data) {
         global $DB;
@@ -225,9 +220,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws dml_exception
-     * @throws restore_step_exception
+     * Process question choices.
+     * @param array $data
      */
     protected function process_questionnaire_quest_choice($data) {
         global $CFG, $DB;
@@ -259,7 +253,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process dependencies.
+     * @param array $data
      */
     protected function process_questionnaire_dependency($data) {
         $data = (object)$data;
@@ -273,7 +268,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process attempts (these are no longer used).
+     * @param array $data
      * @return bool
      */
     protected function process_questionnaire_attempt($data) {
@@ -282,9 +278,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws dml_exception
-     * @throws restore_step_exception
+     * Process responses.
+     * @param array $data
      */
     protected function process_questionnaire_response($data) {
         global $DB;
@@ -306,7 +301,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process boolean responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_bool($data) {
@@ -321,7 +317,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process date responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_date($data) {
@@ -336,7 +333,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process multiple responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_multiple($data) {
@@ -352,7 +350,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process other responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_other($data) {
@@ -368,7 +367,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process rank responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_rank($data) {
@@ -390,7 +390,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
+     * Process single responses.
+     * @param array $data
      * @throws dml_exception
      */
     protected function process_questionnaire_response_single($data) {
@@ -406,8 +407,8 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @param $data
-     * @throws dml_exception
+     * Process text answers.
+     * @param array $data
      */
     protected function process_questionnaire_response_text($data) {
         global $DB;
@@ -421,7 +422,7 @@ class restore_questionnaire_activity_structure_step extends restore_activity_str
     }
 
     /**
-     * @throws dml_exception
+     * Stuff to do after execution.
      */
     protected function after_execute() {
         global $DB;

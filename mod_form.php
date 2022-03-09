@@ -23,17 +23,15 @@ require_once($CFG->dirroot.'/mod/questionnaire/locallib.php');
 /**
  * print the form to add or edit a questionnaire-instance
  *
+ * @package mod_questionnaire
  * @author Mike Churchward
  * @copyright  2016 onward Mike Churchward (mike.churchward@poetgroup.org)
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package mod_questionnaire
  */
-
 class mod_questionnaire_mod_form extends moodleform_mod {
 
     /**
-     * @throws coding_exception
-     * @throws dml_exception
+     * Form definition.
      */
     protected function definition() {
         global $COURSE;
@@ -151,8 +149,8 @@ class mod_questionnaire_mod_form extends moodleform_mod {
     }
 
     /**
+     * Pre-process form data.
      * @param array $defaultvalues
-     * @throws dml_exception
      */
     public function data_preprocessing(&$defaultvalues) {
         global $DB;
@@ -180,7 +178,6 @@ class mod_questionnaire_mod_form extends moodleform_mod {
 
     /**
      * Enforce validation rules here
-     *
      * @param array $data array of ("fieldname"=>value) of submitted data
      * @param array $files array of uploaded files "element_name"=>tmp_file_path
      * @return array
@@ -198,8 +195,8 @@ class mod_questionnaire_mod_form extends moodleform_mod {
     }
 
     /**
+     * Add any completion rules for the form.
      * @return string[]
-     * @throws coding_exception
      */
     public function add_completion_rules() {
         $mform =& $this->_form;
@@ -208,6 +205,7 @@ class mod_questionnaire_mod_form extends moodleform_mod {
     }
 
     /**
+     * True if the completion rule is enabled.
      * @param array $data
      * @return bool
      */

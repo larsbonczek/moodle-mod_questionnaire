@@ -54,10 +54,11 @@ class questionnaire {
     // Class Methods.
 
     /**
-     * @param $course
-     * @param $cm
+     * The constructor.
+     * @param stdClass $course
+     * @param stdClass $cm
      * @param int $id
-     * @param null $questionnaire
+     * @param null|stdClass $questionnaire
      * @param bool $addquestions
      * @throws dml_exception
      */
@@ -103,7 +104,8 @@ class questionnaire {
 
     /**
      * Adding a survey record to the object.
-     *
+     * @param int $sid
+     * @param null $survey
      */
     public function add_survey($sid = 0, $survey = null) {
         global $DB;
@@ -118,7 +120,6 @@ class questionnaire {
     /**
      * Adding questions to the object.
      * @param bool $sid
-     * @throws dml_exception
      */
     public function add_questions($sid = false) {
         global $DB;
@@ -160,7 +161,6 @@ class questionnaire {
      * Load all response information for this user.
      *
      * @param int $userid
-     * @throws dml_exception
      */
     public function add_user_responses($userid = null) {
         global $USER, $DB;
@@ -184,7 +184,6 @@ class questionnaire {
      * Load the specified response information.
      *
      * @param int $responseid
-     * @throws dml_exception
      */
     public function add_response(int $responseid) {
         global $DB;
@@ -202,7 +201,6 @@ class questionnaire {
      * Load the response information from a submitted web form.
      *
      * @param stdClass $formdata
-     * @throws dml_exception
      */
     public function add_response_from_formdata(stdClass $formdata) {
         $this->responses[0] = mod_questionnaire\responsetype\response\response::response_from_webform($formdata, $this->questions);
@@ -229,7 +227,7 @@ class questionnaire {
 
     /**
      * Add the renderer to the questionnaire object.
-     * @param \plugin_renderer_base $renderer The module renderer, extended from core renderer.
+     * @param plugin_renderer_base $renderer The module renderer, extended from core renderer.
      */
     public function add_renderer(plugin_renderer_base $renderer) {
         $this->renderer = $renderer;
@@ -237,7 +235,7 @@ class questionnaire {
 
     /**
      * Add the templatable page to the questionnaire object.
-     * @param \renderable, \templatable $page The page to rendere, implementing core classes.
+     * @param templatable $page The page to render, implementing core classes.
      */
     public function add_page($page) {
         $this->page = $page;
@@ -326,9 +324,9 @@ class questionnaire {
 
     /**
      * Delete the specified response, and insert a new one.
-     * @param $rid
-     * @param $sec
-     * @param $quser
+     * @param int $rid
+     * @param int $sec
+     * @param int $quser
      * @return bool|int
      */
     public function delete_insert_response($rid, $sec, $quser) {
@@ -338,11 +336,9 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
-     * @param $quser
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * Commit the response.
+     * @param int $rid
+     * @param int $quser
      */
     public function commit_submission_response($rid, $quser) {
         $this->response_commit($rid);
@@ -378,7 +374,7 @@ class questionnaire {
     /**
      * Update the grade for this questionnaire and user.
      *
-     * @param $userid
+     * @param int $userid
      */
     private function update_grades($userid) {
         if ($this->grade != 0) {
@@ -392,12 +388,9 @@ class questionnaire {
         }
     }
 
-    /*
-    * Function to view an entire responses data.
-    *
-    */
     /**
-     * @param $rid
+     * Function to view an entire responses data.
+     * @param int $rid
      * @param string $referer
      * @param string $resps
      * @param bool $compare
@@ -443,7 +436,6 @@ class questionnaire {
 
     /**
      * Function to view all loaded responses.
-     * @throws coding_exception
      */
     public function view_all_responses() {
         $this->print_survey_start('', 1, 1, 0);
@@ -463,6 +455,7 @@ class questionnaire {
     // Access Methods.
 
     /**
+     * True if the questionnaire is active.
      * @return bool
      */
     public function is_active() {
@@ -470,6 +463,7 @@ class questionnaire {
     }
 
     /**
+     * True if the questionnaire is open.
      * @return bool
      */
     public function is_open() {
@@ -477,6 +471,7 @@ class questionnaire {
     }
 
     /**
+     * True if the questionnaire is closed.
      * @return bool
      */
     public function is_closed() {
@@ -484,7 +479,8 @@ class questionnaire {
     }
 
     /**
-     * @param $userid
+     * True if the specified user can complete this questionnaire.
+     * @param int $userid
      * @return bool
      */
     public function user_can_take($userid) {
@@ -501,7 +497,8 @@ class questionnaire {
     }
 
     /**
-     * @param $userid
+     * True if the specified user is eligible to complete this questionnaire.
+     * @param int $userid
      * @return bool
      */
     public function user_is_eligible($userid) {
@@ -513,7 +510,6 @@ class questionnaire {
      * @param int $userid
      * @param bool $asnotification Return as a rendered notification.
      * @return bool|string
-     * @throws coding_exception
      */
     public function user_access_messages($userid = 0, $asnotification = false) {
         global $USER;
@@ -569,9 +565,9 @@ class questionnaire {
     }
 
     /**
-     * @param $userid
+     * True if the specified user has a saved response for this questionnaire.
+     * @param int $userid
      * @return bool
-     * @throws dml_exception
      */
     public function user_has_saved_response($userid) {
         global $DB;
@@ -581,9 +577,9 @@ class questionnaire {
     }
 
     /**
-     * @param $userid
+     * True if the specified user can complete this questionnaire at this time.
+     * @param int $userid
      * @return bool
-     * @throws dml_exception
      */
     public function user_time_for_new_attempt($userid) {
         global $DB;
@@ -642,6 +638,7 @@ class questionnaire {
     }
 
     /**
+     * True if the accessing course contains the actual questionnaire, as opposed to an instance of a public questionnaire.
      * @return bool
      */
     public function is_survey_owner() {
@@ -649,9 +646,9 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
+     * True if the user can view the specified response.
+     * @param int $rid
      * @return bool|void
-     * @throws dml_exception
      */
     public function can_view_response($rid) {
         global $USER, $DB;
@@ -713,12 +710,11 @@ class questionnaire {
 
     /**
      * True if the user can view the responses to this questionnaire, and there are valid responses.
-     * @param null $usernumresp
+     * @param null|int $usernumresp
      * @return bool
-     * @throws coding_exception
      */
     public function can_view_all_responses($usernumresp = null) {
-        global $USER, $DB, $SESSION;
+        global $USER, $SESSION;
 
         $owner = $this->is_survey_owner();
         $numresp = $this->count_submissions();
@@ -750,9 +746,9 @@ class questionnaire {
 
     /**
      * True if the user can view all of the responses to this questionnaire any time, and there are valid responses.
-     * @param null $usernumresp
+     * @param bool $grouplogic
+     * @param bool $respslogic
      * @return bool
-     * @throws coding_exception
      */
     public function can_view_all_responses_anytime($grouplogic = true, $respslogic = true) {
         // Can view if you are a valid group user, this is the owning course, and there are responses, and you have no
@@ -762,9 +758,10 @@ class questionnaire {
 
     /**
      * True if the user can view all of the responses to this questionnaire any time, and there are valid responses.
-     * @param null $usernumresp
+     * @param null|int $usernumresp
+     * @param bool $grouplogic
+     * @param bool $respslogic
      * @return bool
-     * @throws coding_exception
      */
     public function can_view_all_responses_with_restrictions($usernumresp, $grouplogic = true, $respslogic = true) {
         // Can view if you are a valid group user, this is the owning course, and there are responses, and you can view
@@ -778,10 +775,10 @@ class questionnaire {
     }
 
     /**
-     * @param false $userid
+     * Return the number of submissions for this questionnaire.
+     * @param bool $userid
      * @param int $groupid
      * @return int
-     * @throws dml_exception
      */
     public function count_submissions($userid=false, $groupid=0) {
         global $DB;
@@ -827,7 +824,6 @@ class questionnaire {
      * @param int|bool $userid
      * @param int $groupid
      * @return array
-     * @throws dml_exception
      */
     public function get_responses($userid=false, $groupid=0) {
         global $DB;
@@ -870,6 +866,7 @@ class questionnaire {
     }
 
     /**
+     * True if any of the questions are required.
      * @param int $section
      * @return bool
      */
@@ -911,7 +908,8 @@ class questionnaire {
     }
 
     /**
-     * @param $questionid
+     * Get a list of all dependent questions.
+     * @param int $questionid
      * @return array
      */
     public function get_all_dependants($questionid) {
@@ -942,7 +940,8 @@ class questionnaire {
     }
 
     /**
-     * @param $questionid
+     * Get a list of all dependent questions.
+     * @param int $questionid
      * @return array
      */
     public function get_dependants($questionid) {
@@ -962,8 +961,8 @@ class questionnaire {
 
     /**
      * Function to sort descendants array in get_dependants function.
-     * @param $a
-     * @param $b
+     * @param mixed $a
+     * @param mixed $b
      * @return int
      */
     private static function cmp($a, $b) {
@@ -997,7 +996,7 @@ class questionnaire {
 
     /**
      * Load needed parent question information into the dependencies structure for the requested question.
-     * @param $question
+     * @param \mod_questionnaire\question\question $question
      * @return bool
      */
     public function load_parents($question) {
@@ -1045,8 +1044,8 @@ class questionnaire {
 
     /**
      * Determine the next valid page and return it. Return false if no valid next page.
-     * @param $secnum
-     * @param $rid
+     * @param int $secnum
+     * @param int $rid
      * @return int | bool
      */
     public function next_page($secnum, $rid) {
@@ -1066,8 +1065,9 @@ class questionnaire {
     }
 
     /**
-     * @param $secnum
-     * @param $rid
+     * Determine the previous valid page and return it. Return false if no valid previous page.
+     * @param int $secnum
+     * @param int $rid
      * @return int | bool
      */
     public function prev_page($secnum, $rid) {
@@ -1084,8 +1084,9 @@ class questionnaire {
     }
 
     /**
-     * @param $response
-     * @param $userid
+     * Return the correct action to a next page request.
+     * @param mod_questionnaire\responsetype\response\response $response
+     * @param int $userid
      * @return bool|int|string
      */
     public function next_page_action($response, $userid) {
@@ -1099,8 +1100,9 @@ class questionnaire {
     }
 
     /**
-     * @param $response
-     * @param $userid
+     * Return the correct action to a previous page request.
+     * @param mod_questionnaire\responsetype\response\response $response
+     * @param int $userid
      * @return bool|int
      */
     public function previous_page_action($response, $userid) {
@@ -1109,11 +1111,10 @@ class questionnaire {
     }
 
     /**
-     * @param $response
-     * @param $userid
+     * Handle updating an existing response.
+     * @param mod_questionnaire\responsetype\response\response $response
+     * @param int $userid
      * @return bool|int
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function existing_response_action($response, $userid) {
         $this->response_delete($response->rid, $response->sec);
@@ -1122,8 +1123,8 @@ class questionnaire {
 
     /**
      * Are there any eligible questions to be displayed on the specified page/section.
-     * @param $secnum The section number to check.
-     * @param $rid The current response id.
+     * @param int $secnum The section number to check.
+     * @param int $rid The current response id.
      * @return boolean
      */
     public function eligible_questions_on_page($secnum, $rid) {
@@ -1141,11 +1142,10 @@ class questionnaire {
     // Display Methods.
 
     /**
-     * @param $quser
-     * @param false $userid
+     * The main display method for the survey. Adds HTML to the templates.
+     * @param int $quser
+     * @param bool $userid
      * @return string|void
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function print_survey($quser, $userid=false) {
         global $SESSION, $CFG;
@@ -1278,11 +1278,11 @@ class questionnaire {
     }
 
     /**
-     * @param $formdata
+     * Print the entire survey page.
+     * @param stdClass $formdata
      * @param int $section
      * @param string $message
      * @return bool|void
-     * @throws coding_exception
      */
     private function survey_render(&$formdata, $section = 1, $message = '') {
 
@@ -1343,16 +1343,14 @@ class questionnaire {
     }
 
     /**
-     * @param $message
-     * @param $section
-     * @param $numsections
-     * @param $hasrequired
+     * Print the start of the survey page.
+     * @param string $message
+     * @param int $section
+     * @param int $numsections
+     * @param bool $hasrequired
      * @param string $rid
-     * @param false $blankquestionnaire
+     * @param bool $blankquestionnaire
      * @param string $outputtarget
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
      */
     private function print_survey_start($message, $section, $numsections, $hasrequired, $rid='', $blankquestionnaire=false,
                                         $outputtarget = 'html') {
@@ -1503,9 +1501,9 @@ class questionnaire {
     }
 
     /**
-     * @param $section
-     * @param $numsections
-     * @throws coding_exception
+     * Print the end of the survey page.
+     * @param int $section
+     * @param int $numsections
      */
     private function print_survey_end($section, $numsections) {
         // If no pages autonumbering.
@@ -1521,18 +1519,14 @@ class questionnaire {
         }
     }
 
-    // Blankquestionnaire : if we are printing a blank questionnaire.
-
     /**
-     * @param $courseid
+     * Display a survey suitable for printing.
+     * @param int $courseid
      * @param string $message
      * @param string $referer
      * @param int $rid
-     * @param false $blankquestionnaire
+     * @param bool $blankquestionnaire If we are printing a blank questionnaire.
      * @return false|void
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
      */
     public function survey_print_render($courseid, $message = '', $referer='', $rid=0, $blankquestionnaire=false) {
         global $DB, $CFG;
@@ -1643,10 +1637,9 @@ class questionnaire {
     }
 
     /**
-     * @param $sdata
+     * Update an existing survey.
+     * @param stdClass $sdata
      * @return bool|int
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function survey_update($sdata) {
         global $DB;
@@ -1716,11 +1709,10 @@ class questionnaire {
         return($this->survey->id);
     }
 
-    /* Creates an editable copy of a survey. */
     /**
-     * @param $owner
+     * Creates an editable copy of a survey.
+     * @param int $owner
      * @return bool|int
-     * @throws dml_exception
      */
     public function survey_copy($owner) {
         global $DB;
@@ -1825,12 +1817,12 @@ class questionnaire {
     // RESPONSE LIBRARY.
 
     /**
-     * @param $section
-     * @param $formdata
+     * Check that all questions have been answered in a suitable way.
+     * @param int $section
+     * @param stdClass $formdata
      * @param bool $checkmissing
      * @param bool $checkwrongformat
      * @return string
-     * @throws coding_exception
      */
     private function response_check_format($section, $formdata, $checkmissing = true, $checkwrongformat = true) {
         $missing = 0;
@@ -1897,10 +1889,9 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
-     * @param null $sec
-     * @throws coding_exception
-     * @throws dml_exception
+     * Delete the spcified response.
+     * @param int $rid
+     * @param null|int $sec
      */
     private function response_delete($rid, $sec = null) {
         global $DB;
@@ -1945,9 +1936,9 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
+     * Commit the specified response.
+     * @param int $rid
      * @return bool
-     * @throws dml_exception
      */
     private function response_commit($rid) {
         global $DB;
@@ -1969,7 +1960,6 @@ class questionnaire {
      * Get the latest response id for the user, or verify that the given response id is valid.
      * @param int $userid
      * @return int
-     * @throws dml_exception
      */
     public function get_latest_responseid($userid) {
         global $DB;
@@ -1984,12 +1974,10 @@ class questionnaire {
         }
     }
 
-    // Returns the number of the section in which questions have been answered in a response.
-
     /**
-     * @param $rid
+     * Returns the number of the section in which questions have been answered in a response.
+     * @param int $rid
      * @return int
-     * @throws dml_exception
      */
     private function response_select_max_sec($rid) {
         global $DB;
@@ -2002,12 +1990,10 @@ class questionnaire {
         return $max;
     }
 
-    // Returns the position of the last answered question in a response.
-
     /**
-     * @param $rid
+     * Returns the position of the last answered question in a response.
+     * @param int $rid
      * @return int
-     * @throws dml_exception
      */
     private function response_select_max_pos($rid) {
         global $DB;
@@ -2198,9 +2184,8 @@ class questionnaire {
 
     /**
      * Return a formatted string containing all the questions and answers for a specific submission.
-     * @param $rid
+     * @param int $rid
      * @return string
-     * @throws coding_exception
      */
     private function get_full_submission_for_notifications($rid) {
         $responses = $this->get_full_submission_for_export($rid);
@@ -2220,7 +2205,7 @@ class questionnaire {
 
     /**
      * Construct the response data for a given response and return a structured export.
-     * @param $rid
+     * @param int $rid
      * @return string
      * @throws coding_exception
      */
@@ -2231,7 +2216,7 @@ class questionnaire {
 
     /**
      * Return a JSON structure containing all the questions and answers for a specific submission.
-     * @param $rid
+     * @param int $rid
      * @return array
      */
     private function get_full_submission_for_export($rid) {
@@ -2341,8 +2326,6 @@ class questionnaire {
      * @param int $rid The id of the response record.
      * @param string $email The comma separated list of emails to send to.
      * @return bool
-     * @throws coding_exception
-     * @throws dml_exception
      */
     private function response_send_email($rid, $email) {
         global $CFG;
@@ -2398,12 +2381,11 @@ class questionnaire {
     }
 
     /**
+     * Insert the provided response.
      * @param object $responsedata An object containing all data for the response.
      * @param int $userid
      * @param bool $resume
      * @return bool|int
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function response_insert($responsedata, $userid, $resume=false) {
         global $DB;
@@ -2449,7 +2431,8 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
+     * Get the answers for the all response types.
+     * @param int $rid
      * @return array
      */
     private function response_select($rid) {
@@ -2475,9 +2458,7 @@ class questionnaire {
     }
 
     /**
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * Redirect to the appropriate finish page.
      */
     private function response_goto_thankyou() {
         global $CFG, $USER, $DB;
@@ -2543,8 +2524,8 @@ class questionnaire {
     }
 
     /**
-     * @param $url
-     * @throws coding_exception
+     * Redirect to the provided url.
+     * @param string $url
      */
     private function response_goto_saved($url) {
         global $CFG;
@@ -2562,13 +2543,11 @@ class questionnaire {
     // Survey Results Methods.
 
     /**
-     * @param $currrid
-     * @param $currentgroupid
-     * @param $cm
-     * @param $byresponse
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * Add the navigation to the responses page.
+     * @param int $currrid
+     * @param int $currentgroupid
+     * @param stdClass $cm
+     * @param bool $byresponse
      */
     public function survey_results_navbar_alpha($currrid, $currentgroupid, $cm, $byresponse) {
         global $CFG, $DB;
@@ -2728,17 +2707,14 @@ class questionnaire {
         }
     }
 
-    // Display responses for current user (your responses).
-
     /**
-     * @param $currrid
-     * @param $userid
-     * @param $instance
-     * @param $resps
+     * Display responses for current user (your responses).
+     * @param int $currrid
+     * @param int $userid
+     * @param int $instance
+     * @param array $resps
      * @param string $reporttype
      * @param string $sid
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function survey_results_navbar_student($currrid, $userid, $instance, $resps, $reporttype='myreport', $sid='') {
         global $DB;
@@ -2812,8 +2788,6 @@ class questionnaire {
      * @param string $currentgroupid
      * @param string $sort
      * @return string|void
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function survey_results($rid = '', $uid=false, $pdf = false, $currentgroupid='', $sort='') {
         global $SESSION, $DB;
@@ -2951,12 +2925,9 @@ class questionnaire {
 
     /**
      * Get unique list of question types used in the current survey.
-     *
-     * @author: Guy Thomas
-     * @param int $surveyid
      * @param bool $uniquebytable
      * @return array
-     * @throws moodle_exception
+     * @author: Guy Thomas
      */
     protected function get_survey_questiontypes($uniquebytable = false) {
 
@@ -2992,8 +2963,8 @@ class questionnaire {
     /**
      * Return all the fields to be used for users in questionnaire sql.
      *
-     * @author: Guy Thomas
      * @return array|string
+     * @author: Guy Thomas
      */
     protected function user_fields() {
         if (class_exists('\core_user\fields')) {
@@ -3008,10 +2979,10 @@ class questionnaire {
     /**
      * Get all survey responses in one go.
      *
-     * @author: Guy Thomas
      * @param string $rid
      * @param string $userid
      * @return array
+     * @author: Guy Thomas
      */
     protected function get_survey_all_responses($rid = '', $userid = '', $groupid = false, $showincompletes = 0) {
         global $DB;
@@ -3209,11 +3180,9 @@ class questionnaire {
         return $positioned;
     }
 
-    /* {{{ proto array survey_generate_csv(int surveyid)
-    Exports the results of a survey to an array.
-    */
     /**
-     * @param $currentgroupid
+     * Exports the results of a survey to an array.
+     * @param int $currentgroupid
      * @param string $rid
      * @param string $userid
      * @param int $choicecodes
@@ -3221,11 +3190,6 @@ class questionnaire {
      * @param int $showincompletes
      * @param int $rankaverages
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws dml_missing_record_exception
-     * @throws dml_multiple_records_exception
-     * @throws moodle_exception
      */
     public function generate_csv($currentgroupid, $rid='', $userid='', $choicecodes=1, $choicetext=0, $showincompletes=0,
                                  $rankaverages=0) {
@@ -3648,7 +3612,6 @@ class questionnaire {
      * @param int $movetopos The position to move question to.
      *
      */
-
     public function move_question($moveqid, $movetopos) {
         global $DB;
 
@@ -3676,16 +3639,15 @@ class questionnaire {
     }
 
     /**
-     * @param $rid
-     * @param $resps
-     * @param $compare
-     * @param $isgroupmember
-     * @param $allresponses
-     * @param $currentgroupid
-     * @param null $filteredsections
+     * Render the response analysis page.
+     * @param int $rid
+     * @param array $resps
+     * @param bool $compare
+     * @param bool $isgroupmember
+     * @param bool $allresponses
+     * @param int $currentgroupid
+     * @param array $filteredsections
      * @return array|string
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function response_analysis($rid, $resps, $compare, $isgroupmember, $allresponses, $currentgroupid,
                                       $filteredsections = null) {
@@ -4033,15 +3995,14 @@ class questionnaire {
 
     // Mobile support area.
     /**
-     * @param $userid
-     * @param $sec
-     * @param $completed
-     * @param $submit
+     * Save the data from the mobile app.
+     * @param int $userid
+     * @param int $sec
+     * @param bool $completed
+     * @param int $rid
+     * @param bool $submit
      * @param array $responses
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
      */
     public function save_mobile_data($userid, $sec, $completed, $rid, $submit, $action, array $responses) {
         global $DB, $CFG; // Do not delete "$CFG".
@@ -4079,6 +4040,7 @@ class questionnaire {
     }
 
     /**
+     * Get all of the areas that can have files.
      * @return array
      * @throws dml_exception
      */
